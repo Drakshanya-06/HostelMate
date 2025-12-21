@@ -1,0 +1,279 @@
+import React, { useState, useEffect } from 'react';
+import { Routes, Route, Navigate, useNavigate, Link, useLocation } from 'react-router-dom';
+import LoginPage from './pages/LoginPage';
+import RegistrationPage from './pages/RegistrationPage';
+import StudentPortal from './pages/StudentPortal';
+import AdminDashboard from './components/AdminDashboard';
+import GuestDashboard from './components/GuestDashboard';
+import ThemeToggle from './components/ThemeToggle';
+
+import StudentLogin from './pages/StudentLogin';
+import AdminLogin from './pages/AdminLogin';
+import GuestLogin from './pages/GuestLogin';
+import ForgotPassword from './pages/ForgotPassword';
+import GateTiming from './pages/GateTiming';
+
+const App = () => {
+    const navigate = useNavigate();
+    const [user, setUser] = useState(null);
+    const [students, setStudents] = useState([]);
+    const [rooms, setRooms] = useState([]);
+    const [guestRequests, setGuestRequests] = useState([]);
+    const [announcements, setAnnouncements] = useState([
+        { id: 1, title: 'WiFi Maintenance', content: 'WiFi will be down for 2 hours tonight starting from 11 PM for server upgrades.', date: '2023-10-20', priority: 'High' },
+        { id: 2, title: 'Annual Fest Meeting', content: 'All residents are invited to the common room for the annual fest planning at 6 PM tomorrow.', date: '2023-10-18', priority: 'Medium' },
+    ]);
+
+    const [complaints, setComplaints] = useState([
+        { id: 'T-101', student: 'Aarav Mehta', room: '201', title: 'WiFi Connectivity Issues', category: 'Internet', status: 'Pending', description: 'Signal strength is very low in the room.', date: '2023-10-24' },
+        { id: 'T-102', student: 'Ishita Sharma', room: '104', title: 'Leaking Tap in Washroom', category: 'Plumbing', status: 'In Progress', description: 'Tap is continuously dripping.', date: '2023-10-23' },
+        { id: 'T-103', student: 'Rahul Singh', room: '305', title: 'Fan Making Noise', category: 'Electrical', status: 'Pending', description: 'Ceiling fan making loud noise at high speed.', date: '2023-10-22' },
+    ]);
+
+    const handleAddRoom = (newRoom) => {
+        setRooms(prev => [...prev, { ...newRoom, id: prev.length + 1 }]);
+    };
+
+    const handleUpdateComplaint = (id, status) => {
+        setComplaints(prev => prev.map(c => c.id === id ? { ...c, status } : c));
+    };
+
+    const handleAddComplaint = (complaint) => {
+        setComplaints(prev => [complaint, ...prev]);
+    };
+
+    const fetchDashboardData = async (token) => {
+        try {
+            const res = await fetch('/api/dashboard', {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            if (res.ok) {
+                const data = await res.json();
+                setStudents(data.students);
+                setRooms(data.rooms);
+                setGuestRequests(data.guestRequests);
+            }
+        } catch (e) {
+            console.error("Failed to fetch dashboard data", e);
+        }
+    };
+
+    const handleLogin = (role, id, token) => {
+        const userInfo = { role, id, token };
+        setUser(userInfo);
+        localStorage.setItem('user', JSON.stringify(userInfo));
+        localStorage.setItem('token', token);
+
+        if (role === 'STUDENT') navigate('/student');
+        else if (role === 'ADMIN' || role === 'WARDEN') {
+            fetchDashboardData(token);
+            navigate('/admin');
+        }
+    };
+
+    const handleLogout = () => {
+        setUser(null);
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        navigate('/login');
+    };
+
+    useEffect(() => {
+        const storedUser = localStorage.getItem('user');
+        if (storedUser) {
+            const parsedUser = JSON.parse(storedUser);
+            setUser(parsedUser);
+            const token = localStorage.getItem('token');
+            if (token && (parsedUser.role === 'ADMIN' || parsedUser.role === 'WARDEN')) {
+                fetchDashboardData(token);
+            }
+        }
+    }, []);
+
+    const updateStudentPhoto = (id, photoBase64) => {
+        setStudents(prev => prev.map(s => s.studentId === id ? { ...s, profilePhoto: photoBase64 } : s));
+    };
+
+    const updateGuestData = (id, newData) => {
+        setGuestRequests(prev => prev.map(g => g.id === id ? { ...g, ...newData } : g));
+    };
+
+    const updateGuestStatus = async (id, status) => {
+        // Optimistic update
+        setGuestRequests(prev => prev.map(g => g.id === id ? { ...g, status } : g));
+
+        try {
+            if (!user?.token) return;
+            const res = await fetch(`/api/guest/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${user.token}`
+                },
+                body: JSON.stringify({ status, actionBy: user.role })
+            });
+            if (res.ok) {
+                const updated = await res.json();
+                setGuestRequests(prev => prev.map(g => g.id === id ? updated : g));
+            }
+        } catch (e) {
+            console.error('Guest update error:', e);
+            // Optionally revert on error if needed, but for prototypes, staying with optimistic is usually better
+        }
+    };
+
+
+    const updateStudentProfile = (id, updatedData) => {
+        setStudents(prev => prev.map(s => s.studentId === id ? { ...s, ...updatedData } : s));
+    };
+
+    const location = useLocation();
+    const isLoginRoute = ['/login', '/student-login', '/admin-login', '/guest-login', '/register', '/forgot-password', '/guest'].includes(location.pathname);
+
+    return (
+        <div
+            className={`min-h-screen relative flex flex-col overflow-x-hidden transition-all duration-700 ${isLoginRoute ? 'bg-slate-900' : 'bg-rose-50'
+                }`}
+        >
+            {isLoginRoute && (
+                <div
+                    className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-40 mix-blend-overlay"
+                    style={{ backgroundImage: "url('https://images.unsplash.com/photo-1555854817-5b2260d1bd63?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80')" }}
+                />
+            )}
+
+
+            <nav className={`backdrop-blur-md border-b px-6 py-4 flex justify-between items-center sticky top-0 z-50 shadow-sm transition-all duration-500 ${isLoginRoute
+                ? 'bg-slate-900/50 border-white/10 text-white'
+                : 'bg-white/90 dark:bg-gray-800/90 border-gray-200/50 dark:border-gray-700/50 text-gray-900'
+                }`}>
+                <Link to="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
+                    <i className="fas fa-home text-indigo-600 text-xl"></i>
+                    <h1 className={`text-xl font-bold tracking-tight ${isLoginRoute ? 'text-white' : 'text-gray-900 dark:text-white'}`}>
+                        Hostel<span className="text-indigo-600">Mate</span>
+                    </h1>
+                </Link>
+                <div className="flex items-center gap-4">
+                    {/* Theme Toggle Removed - Dark Mode Enforced */}
+                    {user && (
+                        <>
+                            <span className="text-sm font-medium bg-indigo-50 text-indigo-700 dark:bg-indigo-900 dark:text-indigo-200 px-3 py-1 rounded-full uppercase">
+                                {user.role}
+                            </span>
+                            <button
+                                onClick={handleLogout}
+                                className="text-gray-500 hover:text-red-600 dark:text-gray-400 transition-colors"
+                            >
+                                <i className="fas fa-sign-out-alt"></i>
+                            </button>
+                        </>
+                    )}
+                </div>
+            </nav>
+
+
+            <main className="flex-1 flex flex-col relative z-10">
+                <Routes>
+                    <Route path="/" element={<Navigate to="/login" />} />
+
+                    <Route
+                        path="/login"
+                        element={user ? <Navigate to={user.role === 'STUDENT' ? '/student' : '/admin'} /> : <LoginPage />}
+                    />
+
+                    <Route
+                        path="/student-login"
+                        element={user ? <Navigate to="/student" /> : <StudentLogin onLogin={handleLogin} />}
+                    />
+
+                    <Route
+                        path="/admin-login"
+                        element={user ? <Navigate to="/admin" /> : <AdminLogin onLogin={handleLogin} />}
+                    />
+
+                    <Route
+                        path="/guest-login"
+                        element={<GuestLogin />}
+                    />
+
+                    <Route
+                        path="/register"
+                        element={<RegistrationPage onRegister={() => navigate('/login')} />}
+                    />
+
+                    <Route
+                        path="/forgot-password"
+                        element={<ForgotPassword />}
+                    />
+
+                    <Route
+                        path="/gate-timing"
+                        element={<GateTiming />}
+                    />
+
+                    <Route
+                        path="/admin/*"
+                        element={(user?.role === 'ADMIN' || user?.role === 'WARDEN') ?
+                            <AdminDashboard
+                                students={students}
+                                guestRequests={guestRequests}
+                                rooms={rooms}
+                                onUpdateGuestData={updateGuestData}
+                                onUpdateGuest={updateGuestStatus}
+                                onUpdatePhoto={updateStudentPhoto}
+                                onLogout={handleLogout}
+                                onAddRoom={handleAddRoom}
+                                complaints={complaints}
+                                onUpdateComplaint={handleUpdateComplaint}
+                                onRefreshData={() => fetchDashboardData(localStorage.getItem('token'))}
+                            /> : <Navigate to="/admin-login" />
+                        }
+                    />
+
+                    <Route
+                        path="/student/*"
+                        element={user?.role === 'STUDENT' ?
+                            <StudentPortal
+                                student={students.find(s => s.studentId === user.id) || students[0]}
+                                announcements={announcements}
+                                onLogout={handleLogout}
+                                complaints={complaints}
+                                onAddComplaint={handleAddComplaint}
+                                onUpdateProfile={updateStudentProfile}
+                            /> : <Navigate to="/student-login" />
+                        }
+                    />
+
+                    <Route
+                        path="/guest"
+                        element={<GuestDashboard
+                            allRequests={guestRequests}
+                            onRequestSubmit={async (req) => {
+                                try {
+                                    const res = await fetch('/api/guest/request', {
+                                        method: 'POST',
+                                        headers: { 'Content-Type': 'application/json' },
+                                        body: JSON.stringify({
+                                            ...req,
+                                            totalFee: req.totalFee || req.costBreakdown?.total || 0,
+                                            feeStatus: 'pending' // As per cash flow
+                                        })
+                                    });
+                                    setGuestRequests(prev => [...prev, req]);
+                                    alert('Request submitted!');
+                                } catch (e) {
+                                    console.log('API failed, falling back to local state');
+                                    setGuestRequests(prev => [...prev, req]);
+                                }
+                            }}
+                        />}
+                    />
+
+                    <Route path="*" element={<Navigate to="/login" />} />
+                </Routes>
+            </main>
+        </div>
+    );
+};
+
+export default App;

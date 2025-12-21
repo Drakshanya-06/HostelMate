@@ -1,0 +1,8 @@
+
+{
+  "name": "HostelWise Dissertation System",
+  "description": "A comprehensive hostel management system with Admin, Student, and Guest portals featuring smart analytics and room management across 10 hostels.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
