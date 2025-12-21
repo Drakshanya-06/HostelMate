@@ -124,14 +124,22 @@ export const approvePayment = async (req, res) => {
                 const messDeduction = Math.min(entity.messBill, remainingPaid);
                 entity.messBill -= messDeduction;
                 remainingPaid -= messDeduction;
+                if (entity.messBill === 0) entity.hasMess = true;
 
                 // 3. Deduct from Gym Bill
                 const gymDeduction = Math.min(entity.gymBill, remainingPaid);
                 entity.gymBill -= gymDeduction;
                 remainingPaid -= gymDeduction;
+                if (entity.gymBill === 0) entity.hasGym = true;
+
+                // 4. Deduct from Laundry Bill
+                const laundryDeduction = Math.min(entity.laundryBill || 0, remainingPaid);
+                entity.laundryBill = (entity.laundryBill || 0) - laundryDeduction;
+                remainingPaid -= laundryDeduction;
+                if (entity.laundryBill === 0) entity.hasLaundry = true;
 
                 // Set status to paid only if ALL are cleared
-                entity.feeStatus = (entity.pendingFee === 0 && entity.messBill === 0 && entity.gymBill === 0) ? 'paid' : 'unpaid';
+                entity.feeStatus = (entity.pendingFee === 0 && entity.messBill === 0 && entity.gymBill === 0 && (entity.laundryBill || 0) === 0) ? 'paid' : 'unpaid';
 
                 entity.paymentHistory.push({
                     amount: totalPaidAtStart,

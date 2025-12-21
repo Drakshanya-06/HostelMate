@@ -124,22 +124,26 @@ export const getStudentProfile = async (req, res) => {
         if (student) {
             // Ensure bills and discounted rates are synchronized for all students during this update phase
             let updated = false;
-            // Force update to 21.6k if currently 0, null, or 30k (the old default)
-            if (student.pendingFee === 0 || !student.pendingFee || student.pendingFee === 30000) {
+            // Force update to 21.6k only if null or the old 30k default (NOT if 0, as 0 can be a paid status now)
+            if (student.pendingFee === undefined || student.pendingFee === null || student.pendingFee === 30000) {
                 student.pendingFee = 21600;
                 updated = true;
             }
-            if (!student.messBill) {
+            if (!student.messBill && student.messBill !== 0) {
                 student.messBill = 5000;
                 updated = true;
             }
-            if (!student.gymBill) {
+            if (!student.gymBill && student.gymBill !== 0) {
                 student.gymBill = 2000;
+                updated = true;
+            }
+            if (!student.laundryBill && student.laundryBill !== 0) {
+                student.laundryBill = 1000;
                 updated = true;
             }
 
             // Sync feeStatus: if any dues exist and not already pending, mark as unpaid
-            const totalDues = (student.pendingFee || 0) + (student.messBill || 0) + (student.gymBill || 0);
+            const totalDues = (student.pendingFee || 0) + (student.messBill || 0) + (student.gymBill || 0) + (student.laundryBill || 0);
             if (totalDues > 0 && student.feeStatus === 'paid') {
                 student.feeStatus = 'unpaid';
                 updated = true;

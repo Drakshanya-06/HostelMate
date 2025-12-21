@@ -14,6 +14,10 @@ const studentSchema = new mongoose.Schema({
     pendingFee: { type: Number, default: 21600 },
     messBill: { type: Number, default: 5000 },
     gymBill: { type: Number, default: 2000 },
+    laundryBill: { type: Number, default: 1000 },
+    hasMess: { type: Boolean, default: false },
+    hasLaundry: { type: Boolean, default: false },
+    hasGym: { type: Boolean, default: false },
     feeStatus: { type: String, enum: ['unpaid', 'pending', 'paid'], default: 'unpaid' },
     paymentMethod: { type: String, enum: ['CASH', 'NONE'], default: 'NONE' },
     lastPaymentDetails: {

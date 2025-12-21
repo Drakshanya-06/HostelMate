@@ -337,7 +337,7 @@ const StudentDashboard = ({ student, announcements, onLogout, complaints: allCom
                                         <div className="relative z-10">
                                             <div className="text-[10px] font-black uppercase tracking-[0.2em] opacity-70 mb-2">Liability Portfolio</div>
                                             <div className="text-4xl font-black italic tracking-tighter">
-                                                {student?.feeStatus === 'pending' ? 'PENDING' : `₹${(student?.pendingFee || 0) + (student?.messBill || 0) + (student?.gymBill || 0)}`}
+                                                {student?.feeStatus === 'pending' ? 'PENDING' : `₹${(student?.pendingFee || 0) + (student?.messBill || 0) + (student?.gymBill || 0) + (student?.laundryBill || 0)}`}
                                             </div>
 
                                             <div className="mt-4 space-y-2 opacity-80">
@@ -353,6 +353,10 @@ const StudentDashboard = ({ student, announcements, onLogout, complaints: allCom
                                                     <span>Gym Bill</span>
                                                     <span>₹{student?.gymBill || 0}</span>
                                                 </div>
+                                                <div className="flex justify-between text-[9px] font-black uppercase">
+                                                    <span>Laundry Bill</span>
+                                                    <span>₹{student?.laundryBill || 0}</span>
+                                                </div>
                                             </div>
 
                                             <button
@@ -361,7 +365,7 @@ const StudentDashboard = ({ student, announcements, onLogout, complaints: allCom
                                                         addToast('Payment is already pending approval', 'info');
                                                         return;
                                                     }
-                                                    if (((student?.pendingFee || 0) + (student?.messBill || 0) + (student?.gymBill || 0) === 0)) {
+                                                    if (((student?.pendingFee || 0) + (student?.messBill || 0) + (student?.gymBill || 0) + (student?.laundryBill || 0) === 0)) {
                                                         addToast('No pending dues', 'success');
                                                         return;
                                                     }
@@ -411,11 +415,11 @@ const StudentDashboard = ({ student, announcements, onLogout, complaints: allCom
                                                                 onChange={(e) => setPaymentAmount(Number(e.target.value))}
                                                                 className="w-full bg-white dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 rounded-2xl py-4 pl-10 pr-6 text-2xl font-black text-slate-900 dark:text-white focus:border-indigo-500 transition-all outline-none"
                                                                 placeholder="Enter Amount"
-                                                                max={(student?.pendingFee || 0) + (student?.messBill || 0) + (student?.gymBill || 0)}
+                                                                max={(student?.pendingFee || 0) + (student?.messBill || 0) + (student?.gymBill || 0) + (student?.laundryBill || 0)}
                                                                 min={1}
                                                             />
                                                         </div>
-                                                        <p className="text-[10px] font-bold text-slate-400 mt-3 italic">Maximum: ₹{(student?.pendingFee || 0) + (student?.messBill || 0) + (student?.gymBill || 0)}</p>
+                                                        <p className="text-[10px] font-bold text-slate-400 mt-3 italic">Maximum: ₹{(student?.pendingFee || 0) + (student?.messBill || 0) + (student?.gymBill || 0) + (student?.laundryBill || 0)}</p>
                                                     </div>
 
                                                     <div className="space-y-4">
