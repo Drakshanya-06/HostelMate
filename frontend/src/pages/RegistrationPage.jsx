@@ -105,27 +105,28 @@ const RegistrationPage = ({ onRegister }) => {
 
     if (showOtp) {
         return (
-            <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-6 transition-all">
-                <div className="max-w-md w-full bg-white/90 dark:bg-slate-800/90 backdrop-blur-xl rounded-[2.5rem] shadow-2xl shadow-slate-200/20 dark:shadow-none border border-white/50 dark:border-slate-700/50 p-10 animate-in fade-in zoom-in duration-500">
-                    <div className="text-center mb-10">
-                        <div className="w-20 h-20 bg-indigo-50 dark:bg-indigo-900/30 rounded-3xl flex items-center justify-center mx-auto mb-6 transform -rotate-6 hover:rotate-0 transition-transform duration-300">
-                            <i className="fas fa-envelope-open-text text-3xl text-indigo-600 dark:text-indigo-400"></i>
+            <div className="fixed inset-0 z-50 bg-background/80 backdrop-blur-md flex items-center justify-center p-6 transition-all">
+                <div className="max-w-md w-full bg-surface/60 backdrop-blur-2xl rounded-[3rem] shadow-2xl shadow-black/50 border border-white/5 p-12 animate-in fade-in zoom-in duration-500 text-center relative overflow-hidden">
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full -mr-16 -mt-16 blur-3xl"></div>
+                    <div className="mb-10 relative z-10">
+                        <div className="w-24 h-24 bg-primary/20 rounded-[2rem] flex items-center justify-center mx-auto mb-8 transform -rotate-6 hover:rotate-0 transition-transform duration-500 shadow-2xl shadow-primary/20 animate-float">
+                            <i className="fas fa-envelope-open-text text-4xl text-primary"></i>
                         </div>
-                        <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white mb-2">Verify Email</h2>
-                        <p className="text-slate-500 dark:text-slate-400">Enter the OTP sent to <span className="text-indigo-600 font-bold">{formData.email}</span></p>
+                        <h2 className="text-3xl font-black text-textPrimary mb-3 tracking-tighter font-heading italic">Verify Identity</h2>
+                        <p className="text-textSecondary font-medium leading-relaxed">A security protocol has been sent to <span className="text-primary font-bold">{formData.email}</span></p>
                     </div>
 
-                    <form onSubmit={handleVerifyOtp} className="space-y-6">
+                    <form onSubmit={handleVerifyOtp} className="space-y-8 relative z-10">
                         <input
                             type="text"
                             value={otp}
                             onChange={(e) => setOtp(e.target.value)}
                             placeholder="0 0 0 0 0 0"
-                            className="w-full px-4 py-4 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl text-center text-3xl font-black tracking-[0.5em] focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 outline-none transition-all dark:text-white"
+                            className="w-full px-4 py-5 bg-background border border-white/5 rounded-3xl text-center text-4xl font-black tracking-[0.5em] text-primary focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all placeholder:text-white/5 shadow-inner"
                             maxLength={6}
                         />
-                        <button type="submit" className="w-full bg-indigo-600 text-white py-4 rounded-2xl font-bold hover:bg-indigo-700 shadow-lg shadow-indigo-200 dark:shadow-none transition-all hover:scale-[1.02] active:scale-[0.98]">
-                            Verify & Complete <i className="fas fa-check-circle ml-2"></i>
+                        <button type="submit" className="w-full bg-primary text-white py-5 rounded-[1.5rem] font-black text-xs uppercase tracking-[0.3em] hover:bg-primary-hover shadow-2xl shadow-primary/30 transition-all hover:scale-[1.02] active:scale-95">
+                            Verify Protocol <i className="fas fa-shield-check ml-2"></i>
                         </button>
                     </form>
                 </div>
@@ -134,130 +135,136 @@ const RegistrationPage = ({ onRegister }) => {
     }
 
     return (
-        <div className="flex items-center justify-center py-12 px-4 transition-all flex-1 min-h-[calc(100vh-80px)]">
-            <div className="max-w-5xl w-full bg-white/95 dark:bg-slate-800/95 backdrop-blur-xl rounded-[2.5rem] shadow-2xl flex flex-col md:flex-row overflow-hidden border border-white/20 dark:border-slate-700/50 animate-in fade-in zoom-in duration-500 relative">
+        <div className="flex items-center justify-center py-12 px-4 transition-all flex-1 min-h-[calc(100vh-80px)] bg-background">
+            <div className="max-w-6xl w-full bg-surface/40 backdrop-blur-3xl rounded-[3.5rem] shadow-2xl shadow-black/50 flex flex-col md:flex-row overflow-hidden border border-white/5 animate-in fade-in zoom-in duration-700 relative">
 
                 {/* Dark Sidebar in Card */}
-                <div className="w-full md:w-80 bg-slate-900 p-12 text-white flex flex-col justify-between relative overflow-hidden">
-                    <div className="absolute inset-0 bg-indigo-600/10 z-0" />
+                <div className="w-full md:w-96 bg-surface p-16 text-white flex flex-col justify-between relative overflow-hidden border-r border-white/5">
+                    <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_top_left,rgba(139,92,246,0.1),transparent)] pointer-events-none"></div>
                     <div className="relative z-10">
-                        <Link to="/login" className="flex items-center gap-2 text-slate-400 hover:text-white transition-all mb-12 group">
+                        <Link to="/login" className="flex items-center gap-3 text-textSecondary hover:text-primary transition-all mb-16 group">
                             <i className="fas fa-arrow-left group-hover:-translate-x-1 transition-transform"></i>
-                            <span className="text-[10px] font-black uppercase tracking-[0.2em]">Go back</span>
+                            <span className="text-[10px] font-black uppercase tracking-[0.3em]">Portal Access</span>
                         </Link>
-                        <h2 className="text-3xl font-black italic mb-2">Hostel<span className="text-indigo-500">Mate</span></h2>
-                        <p className="text-xs font-bold text-slate-400 uppercase tracking-[0.2em] mb-8">Account Setup</p>
-                        <p className="text-slate-300 text-sm leading-relaxed mb-12">Join our premium resident community. Complete the steps to secure your smart living space.</p>
+                        <div className="flex items-center gap-4 mb-3">
+                            <div className="bg-primary p-3 rounded-2xl shadow-xl shadow-primary/30 animate-float">
+                                <i className="fas fa-user-plus text-2xl text-white"></i>
+                            </div>
+                            <h2 className="text-3xl font-black italic tracking-tighter">Hostel<span className="text-primary">Mate</span></h2>
+                        </div>
+                        <p className="text-[10px] font-black text-primary uppercase tracking-[0.3em] mb-10">Resident Onboarding</p>
+                        <p className="text-textSecondary text-base leading-relaxed mb-16 font-medium">Join our premier resident network. Your digital keys and unified living space await.</p>
 
-                        <div className="bg-white/5 backdrop-blur-md px-6 py-4 rounded-3xl border border-white/10">
-                            <div className="text-[10px] font-black uppercase tracking-widest text-slate-500 mb-2">Current Progress</div>
+                        <div className="bg-white/5 backdrop-blur-md px-8 py-6 rounded-[2rem] border border-white/5 shadow-2xl shadow-black/20">
+                            <div className="text-[10px] font-black uppercase tracking-[0.3em] text-primary/70 mb-3">Onboarding Pulse</div>
                             <div className="flex justify-between items-end">
-                                <span className="text-3xl font-black italic">Step {step}</span>
-                                <span className="text-slate-400 font-bold mb-1">/ 2</span>
+                                <span className="text-4xl font-black italic tracking-tighter">Phase {step}</span>
+                                <span className="text-textSecondary font-bold mb-1 uppercase tracking-widest text-[10px]">/ 02</span>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div className="flex-1 p-10 md:p-16">
-                    <div className="mb-10">
-                        <h3 className="text-2xl font-black text-slate-900 dark:text-white">Join Community</h3>
-                        <p className="text-slate-500 text-xs font-bold uppercase tracking-widest mt-1">
-                            {step === 1 ? 'Personal Information' : 'Institutional Details'}
+                <div className="flex-1 p-12 md:p-20 relative bg-[radial-gradient(circle_at_center,rgba(6,182,212,0.03),transparent)]">
+                    <div className="mb-12">
+                        <h3 className="text-4xl font-black text-textPrimary tracking-tighter italic font-heading">Secure Space</h3>
+                        <p className="text-primary text-[10px] font-black uppercase tracking-[0.3em] mt-3 flex items-center gap-2">
+                            <i className="fas fa-fingerprint animate-pulse"></i>
+                            {step === 1 ? 'Personal Identity Matrix' : 'Institutional Allocation'}
                         </p>
                     </div>
 
-                    <form onSubmit={handleSubmit} className="space-y-6">
+                    <form onSubmit={handleSubmit} className="space-y-8">
                         {step === 1 ? (
-                            <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div className="space-y-8 animate-in fade-in slide-in-from-right-4 duration-500">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                     <div>
-                                        <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">First Name</label>
+                                        <label className="block text-[10px] font-black text-textSecondary uppercase tracking-[0.2em] mb-3 ml-1">Given Name</label>
                                         <input
                                             type="text"
-                                            className={`w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border ${errors.firstName ? 'border-red-500' : 'border-slate-200 dark:border-slate-700'} rounded-2xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 outline-none transition-all dark:text-white`}
+                                            className={`w-full px-6 py-4 bg-surface border ${errors.firstName ? 'border-danger' : 'border-white/5'} rounded-2xl focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all font-bold text-sm`}
                                             value={formData.firstName}
                                             onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
                                             placeholder="Jane"
                                         />
-                                        {errors.firstName && <p className="text-red-500 text-xs mt-2 font-medium">{errors.firstName}</p>}
+                                        {errors.firstName && <p className="text-danger text-[10px] mt-2 font-black uppercase tracking-widest">{errors.firstName}</p>}
                                     </div>
                                     <div>
-                                        <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Last Name</label>
+                                        <label className="block text-[10px] font-black text-textSecondary uppercase tracking-[0.2em] mb-3 ml-1">Family Name</label>
                                         <input
                                             type="text"
-                                            className={`w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border ${errors.lastName ? 'border-red-500' : 'border-slate-200 dark:border-slate-700'} rounded-2xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 outline-none transition-all dark:text-white`}
+                                            className={`w-full px-6 py-4 bg-surface border ${errors.lastName ? 'border-danger' : 'border-white/5'} rounded-2xl focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all font-bold text-sm`}
                                             value={formData.lastName}
                                             onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
                                             placeholder="Doe"
                                         />
-                                        {errors.lastName && <p className="text-red-500 text-xs mt-2 font-medium">{errors.lastName}</p>}
+                                        {errors.lastName && <p className="text-danger text-[10px] mt-2 font-black uppercase tracking-widest">{errors.lastName}</p>}
                                     </div>
                                 </div>
 
                                 <div>
-                                    <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Email Address</label>
+                                    <label className="block text-[10px] font-black text-textSecondary uppercase tracking-[0.2em] mb-3 ml-1">Secure Correspondence</label>
                                     <input
                                         type="email"
-                                        className={`w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border ${errors.email ? 'border-red-500' : 'border-slate-200 dark:border-slate-700'} rounded-2xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 outline-none transition-all dark:text-white`}
+                                        className={`w-full px-6 py-4 bg-surface border ${errors.email ? 'border-danger' : 'border-white/5'} rounded-2xl focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all font-bold text-sm`}
                                         value={formData.email}
                                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                                         placeholder="jane@example.com"
                                     />
-                                    {errors.email && <p className="text-red-500 text-xs mt-2 font-medium">{errors.email}</p>}
+                                    {errors.email && <p className="text-danger text-[10px] mt-2 font-black uppercase tracking-widest">{errors.email}</p>}
                                 </div>
 
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                     <div>
-                                        <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Password</label>
+                                        <label className="block text-[10px] font-black text-textSecondary uppercase tracking-[0.2em] mb-3 ml-1">Access Phrase</label>
                                         <input
                                             type="password"
-                                            className={`w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border ${errors.password ? 'border-red-500' : 'border-slate-200 dark:border-slate-700'} rounded-2xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 outline-none transition-all dark:text-white`}
+                                            className={`w-full px-6 py-4 bg-surface border ${errors.password ? 'border-danger' : 'border-white/5'} rounded-2xl focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all font-bold text-sm`}
                                             value={formData.password}
                                             onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                                             placeholder="••••••••"
                                         />
-                                        {errors.password && <p className="text-red-500 text-xs mt-2 font-medium">{errors.password}</p>}
+                                        {errors.password && <p className="text-danger text-[10px] mt-2 font-black uppercase tracking-widest">{errors.password}</p>}
                                     </div>
                                     <div>
-                                        <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Confirm Password</label>
+                                        <label className="block text-[10px] font-black text-textSecondary uppercase tracking-[0.2em] mb-3 ml-1">Confirm Phrase</label>
                                         <input
                                             type="password"
-                                            className={`w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border ${errors.confirmPassword ? 'border-red-500' : 'border-slate-200 dark:border-slate-700'} rounded-2xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 outline-none transition-all dark:text-white`}
+                                            className={`w-full px-6 py-4 bg-surface border ${errors.confirmPassword ? 'border-danger' : 'border-white/5'} rounded-2xl focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all font-bold text-sm`}
                                             value={formData.confirmPassword}
                                             onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
                                             placeholder="••••••••"
                                         />
-                                        {errors.confirmPassword && <p className="text-red-500 text-xs mt-2 font-medium">{errors.confirmPassword}</p>}
+                                        {errors.confirmPassword && <p className="text-danger text-[10px] mt-2 font-black uppercase tracking-widest">{errors.confirmPassword}</p>}
                                     </div>
                                 </div>
 
                                 <div>
-                                    <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Profile Photo (Optional)</label>
-                                    <div className="flex items-center gap-6">
+                                    <label className="block text-[10px] font-black text-textSecondary uppercase tracking-[0.2em] mb-3 ml-1">Visual Identity (Optional)</label>
+                                    <div className="flex items-center gap-8">
                                         <div className="relative group">
-                                            <div className="w-32 h-32 rounded-2xl border-4 border-slate-200 dark:border-slate-700 overflow-hidden bg-slate-100 dark:bg-slate-900 flex items-center justify-center shadow-lg">
+                                            <div className="w-36 h-36 rounded-3xl border-4 border-white/5 overflow-hidden bg-surface flex items-center justify-center shadow-2xl shadow-black/50">
                                                 {formData.profilePhoto ? (
                                                     <img src={formData.profilePhoto} alt="Preview" className="w-full h-full object-cover" />
                                                 ) : (
-                                                    <i className="fas fa-user text-4xl text-slate-300"></i>
+                                                    <i className="fas fa-user-robot text-5xl text-white/5"></i>
                                                 )}
                                             </div>
                                             {formData.profilePhoto && (
                                                 <button
                                                     type="button"
                                                     onClick={() => setFormData({ ...formData, profilePhoto: '' })}
-                                                    className="absolute -top-2 -right-2 w-8 h-8 bg-rose-500 text-white rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-all opacity-0 group-hover:opacity-100"
+                                                    className="absolute -top-3 -right-3 w-10 h-10 bg-danger text-white rounded-full flex items-center justify-center shadow-2xl hover:scale-110 transition-all opacity-0 group-hover:opacity-100"
                                                 >
-                                                    <i className="fas fa-times text-xs"></i>
+                                                    <i className="fas fa-times"></i>
                                                 </button>
                                             )}
                                         </div>
                                         <div className="flex-1">
                                             <label className="cursor-pointer">
-                                                <div className="px-6 py-4 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 rounded-2xl font-bold text-sm hover:bg-indigo-100 dark:hover:bg-indigo-900/50 transition-all border-2 border-dashed border-indigo-200 dark:border-indigo-800 text-center">
-                                                    <i className="fas fa-cloud-upload-alt mr-2"></i>
-                                                    {formData.profilePhoto ? 'Change Photo' : 'Upload Photo'}
+                                                <div className="px-8 py-5 bg-primary/10 text-primary rounded-2xl font-black text-xs uppercase tracking-[0.2em] hover:bg-primary/20 transition-all border-2 border-dashed border-primary/30 text-center">
+                                                    <i className="fas fa-shuttle-space mr-2"></i>
+                                                    {formData.profilePhoto ? 'Overwrite Visual' : 'Initialize Capture'}
                                                 </div>
                                                 <input
                                                     type="file"
@@ -266,7 +273,7 @@ const RegistrationPage = ({ onRegister }) => {
                                                     className="hidden"
                                                 />
                                             </label>
-                                            <p className="text-xs text-slate-400 mt-2 italic">Max 5MB • JPG, PNG, GIF</p>
+                                            <p className="text-[10px] text-textSecondary mt-3 font-bold uppercase tracking-widest">Quantum Size Limit: 5MB • Universal Formats</p>
                                         </div>
                                     </div>
                                 </div>
@@ -275,90 +282,96 @@ const RegistrationPage = ({ onRegister }) => {
                                     <button
                                         type="button"
                                         onClick={handleNext}
-                                        className="w-full bg-indigo-600 text-white py-4 rounded-2xl font-bold hover:bg-indigo-700 shadow-lg shadow-indigo-200 dark:shadow-none transition-all hover:scale-[1.02] active:scale-[0.98]"
+                                        className="w-full bg-primary text-white py-5 rounded-[1.5rem] font-black text-xs uppercase tracking-[0.3em] hover:bg-primary-hover shadow-2xl shadow-primary/30 transition-all hover:scale-[1.02] active:scale-95"
                                     >
-                                        Continue <i className="fas fa-arrow-right ml-2"></i>
+                                        Next Phase <i className="fas fa-arrow-right ml-2"></i>
                                     </button>
                                 </div>
                             </div>
                         ) : (
-                            <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
+                            <div className="space-y-8 animate-in fade-in slide-in-from-right-4 duration-500">
                                 <div>
-                                    <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Parent / Guardian Name</label>
+                                    <label className="block text-[10px] font-black text-textSecondary uppercase tracking-[0.2em] mb-3 ml-1">Guardian Identity</label>
                                     <input
                                         type="text"
-                                        className={`w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border ${errors.parentsName ? 'border-red-500' : 'border-slate-200 dark:border-slate-700'} rounded-2xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 outline-none transition-all dark:text-white`}
+                                        className={`w-full px-6 py-4 bg-surface border ${errors.parentsName ? 'border-danger' : 'border-white/5'} rounded-2xl focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all font-bold text-sm`}
                                         value={formData.parentsName}
                                         onChange={(e) => setFormData({ ...formData, parentsName: e.target.value })}
                                         placeholder="Full Name"
                                     />
-                                    {errors.parentsName && <p className="text-red-500 text-xs mt-2 font-medium">{errors.parentsName}</p>}
+                                    {errors.parentsName && <p className="text-danger text-[10px] mt-2 font-black uppercase tracking-widest">{errors.parentsName}</p>}
                                 </div>
 
                                 <div>
-                                    <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Emergency Contact Number</label>
+                                    <label className="block text-[10px] font-black text-textSecondary uppercase tracking-[0.2em] mb-3 ml-1">Emergency Protocol Link</label>
                                     <input
                                         type="tel"
-                                        className={`w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border ${errors.phone ? 'border-red-500' : 'border-slate-200 dark:border-slate-700'} rounded-2xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 outline-none transition-all dark:text-white`}
+                                        className={`w-full px-6 py-4 bg-surface border ${errors.phone ? 'border-danger' : 'border-white/5'} rounded-2xl focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all font-bold text-sm`}
                                         value={formData.phone}
                                         onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                                         placeholder="+1 (555) 000-0000"
                                     />
-                                    {errors.phone && <p className="text-red-500 text-xs mt-2 font-medium">{errors.phone}</p>}
+                                    {errors.phone && <p className="text-danger text-[10px] mt-2 font-black uppercase tracking-widest">{errors.phone}</p>}
                                 </div>
 
-                                <div className="grid grid-cols-2 gap-6">
+                                <div className="grid grid-cols-2 gap-8">
                                     <div>
-                                        <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Hostel Block</label>
-                                        <select
-                                            className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 outline-none transition-all dark:text-white appearance-none"
-                                            value={formData.hostelId}
-                                            onChange={(e) => setFormData({ ...formData, hostelId: e.target.value })}
-                                        >
-                                            {[...Array(10)].map((_, i) => (
-                                                <option key={i + 1} value={i + 1}>Block {i + 1}</option>
-                                            ))}
-                                        </select>
+                                        <label className="block text-[10px] font-black text-textSecondary uppercase tracking-[0.2em] mb-3 ml-1">Structural Block</label>
+                                        <div className="relative">
+                                            <select
+                                                className="w-full px-6 py-4 bg-surface border border-white/5 rounded-2xl focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all font-bold text-sm appearance-none cursor-pointer"
+                                                value={formData.hostelId}
+                                                onChange={(e) => setFormData({ ...formData, hostelId: e.target.value })}
+                                            >
+                                                {[...Array(10)].map((_, i) => (
+                                                    <option key={i + 1} value={i + 1}>Sector {i + 1}</option>
+                                                ))}
+                                            </select>
+                                            <i className="fas fa-chevron-down absolute right-6 top-1/2 -translate-y-1/2 text-textSecondary pointer-events-none"></i>
+                                        </div>
                                     </div>
                                     <div>
-                                        <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Floor</label>
-                                        <select
-                                            className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 outline-none transition-all dark:text-white appearance-none"
-                                            value={formData.floor}
-                                            onChange={(e) => setFormData({ ...formData, floor: e.target.value })}
-                                        >
-                                            {[...Array(10)].map((_, i) => (
-                                                <option key={i + 1} value={i + 1}>Floor {i + 1}</option>
-                                            ))}
-                                        </select>
+                                        <label className="block text-[10px] font-black text-textSecondary uppercase tracking-[0.2em] mb-3 ml-1">Vertical Level</label>
+                                        <div className="relative">
+                                            <select
+                                                className="w-full px-6 py-4 bg-surface border border-white/5 rounded-2xl focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all font-bold text-sm appearance-none cursor-pointer"
+                                                value={formData.floor}
+                                                onChange={(e) => setFormData({ ...formData, floor: e.target.value })}
+                                            >
+                                                {[...Array(10)].map((_, i) => (
+                                                    <option key={i + 1} value={i + 1}>Level {i + 1}</option>
+                                                ))}
+                                            </select>
+                                            <i className="fas fa-chevron-down absolute right-6 top-1/2 -translate-y-1/2 text-textSecondary pointer-events-none"></i>
+                                        </div>
                                     </div>
                                 </div>
 
                                 <div>
-                                    <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Preferred Room Number</label>
+                                    <label className="block text-[10px] font-black text-textSecondary uppercase tracking-[0.2em] mb-3 ml-1">Target Allocation Unit</label>
                                     <input
                                         type="number"
-                                        className={`w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border ${errors.roomNumber ? 'border-red-500' : 'border-slate-200 dark:border-slate-700'} rounded-2xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 outline-none transition-all dark:text-white`}
+                                        className={`w-full px-6 py-4 bg-surface border ${errors.roomNumber ? 'border-danger' : 'border-white/5'} rounded-2xl focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all font-bold text-sm`}
                                         value={formData.roomNumber}
                                         onChange={(e) => setFormData({ ...formData, roomNumber: e.target.value })}
                                         placeholder="e.g. 101"
                                     />
-                                    {errors.roomNumber && <p className="text-red-500 text-xs mt-2 font-medium">{errors.roomNumber}</p>}
+                                    {errors.roomNumber && <p className="text-danger text-[10px] mt-2 font-black uppercase tracking-widest">{errors.roomNumber}</p>}
                                 </div>
 
-                                <div className="flex gap-4 pt-6">
+                                <div className="flex gap-6 pt-6">
                                     <button
                                         type="button"
                                         onClick={handleBack}
-                                        className="flex-1 px-4 py-4 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 rounded-2xl font-bold hover:bg-slate-50 dark:hover:bg-slate-700 transition-all active:scale-[0.98]"
+                                        className="flex-1 px-4 py-5 border border-white/5 text-textSecondary rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-white/5 transition-all"
                                     >
-                                        Back
+                                        Revert Phase
                                     </button>
                                     <button
                                         type="submit"
-                                        className="flex-[2] bg-indigo-600 text-white py-4 rounded-2xl font-bold hover:bg-indigo-700 shadow-lg shadow-indigo-200 dark:shadow-none transition-all hover:scale-[1.02] active:scale-[0.98]"
+                                        className="flex-[2] bg-primary text-white py-5 rounded-[1.5rem] font-black text-xs uppercase tracking-[0.3em] hover:bg-primary-hover shadow-2xl shadow-primary/30 transition-all hover:scale-[1.02] active:scale-95"
                                     >
-                                        Complete Registration
+                                        Finalize Matrix
                                     </button>
                                 </div>
                             </div>

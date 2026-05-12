@@ -144,7 +144,7 @@ export const approvePayment = async (req, res) => {
                 entity.paymentHistory.push({
                     amount: totalPaidAtStart,
                     date: new Date(),
-                    method: 'CASH',
+                    method: entity.paymentMethod || 'CASH',
                     receiptId: receiptId
                 });
                 await entity.save();
@@ -161,7 +161,7 @@ export const approvePayment = async (req, res) => {
                 await sendEmail({
                     email: entity.email,
                     subject: 'Payment Successful - HostelMate',
-                    message: `Hello ${entity.firstName},\n\nYour cash payment of ₹${totalPaidAtStart} has been approved by the warden.\n\nYour remaining pending fee is ₹${entity.pendingFee}.\n\nPlease find your payment receipt attached.\n\nThank you!`,
+                    message: `Hello ${entity.firstName},\n\nYour payment of ₹${totalPaidAtStart} has been approved by the warden.\n\nYour remaining pending fee is ₹${entity.pendingFee}.\n\nPlease find your payment receipt attached.\n\nThank you!`,
                     attachments: [{
                         filename: `receipt_${receiptId}.pdf`,
                         content: pdfBuffer
@@ -178,7 +178,7 @@ export const approvePayment = async (req, res) => {
                 entity.paymentHistory.push({
                     amount: amount,
                     date: new Date(),
-                    method: 'CASH',
+                    method: entity.paymentMethod || 'CASH',
                     receiptId: receiptId
                 });
                 await entity.save();
@@ -194,7 +194,7 @@ export const approvePayment = async (req, res) => {
                 await sendEmail({
                     email: entity.email,
                     subject: 'Payment Successful - HostelMate',
-                    message: `Hello ${entity.name},\n\nYour cash payment of ₹${amount} has been approved by the warden.\n\nWe hope you enjoy your stay!\n\nPlease find your payment receipt attached.\n\nThank you!`,
+                    message: `Hello ${entity.name},\n\nYour payment of ₹${amount} has been approved by the warden.\n\nWe hope you enjoy your stay!\n\nPlease find your payment receipt attached.\n\nThank you!`,
                     attachments: [{
                         filename: `guest_receipt_${receiptId}.pdf`,
                         content: pdfBuffer

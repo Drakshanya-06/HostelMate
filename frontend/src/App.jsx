@@ -132,39 +132,36 @@ const App = () => {
 
     return (
         <div
-            className={`min-h-screen relative flex flex-col overflow-x-hidden transition-all duration-700 ${isLoginRoute ? 'bg-slate-900' : 'bg-rose-50'
-                }`}
+            className={`min-h-screen relative flex flex-col overflow-x-hidden transition-all duration-700 bg-background text-textPrimary`}
         >
             {isLoginRoute && (
                 <div
-                    className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-40 mix-blend-overlay"
+                    className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-5 pointer-events-none"
                     style={{ backgroundImage: "url('https://images.unsplash.com/photo-1555854817-5b2260d1bd63?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80')" }}
                 />
             )}
 
 
-            <nav className={`backdrop-blur-md border-b px-6 py-4 flex justify-between items-center sticky top-0 z-50 shadow-sm transition-all duration-500 ${isLoginRoute
-                ? 'bg-slate-900/50 border-white/10 text-white'
-                : 'bg-white/90 dark:bg-gray-800/90 border-gray-200/50 dark:border-gray-700/50 text-gray-900'
-                }`}>
-                <Link to="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-                    <i className="fas fa-home text-indigo-600 text-xl"></i>
-                    <h1 className={`text-xl font-bold tracking-tight ${isLoginRoute ? 'text-white' : 'text-gray-900 dark:text-white'}`}>
-                        Hostel<span className="text-indigo-600">Mate</span>
+            <nav className={`backdrop-blur-3xl border-b px-8 py-5 flex justify-between items-center sticky top-0 z-50 transition-all duration-500 glass`}>
+                <Link to="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
+                    <div className="bg-primary p-2 rounded-xl shadow-lg shadow-primary/20 animate-float">
+                        <i className="fas fa-home text-white text-lg"></i>
+                    </div>
+                    <h1 className={`text-2xl font-black tracking-tighter text-white font-heading italic`}>
+                        Hostel<span className="text-primary">Mate</span>
                     </h1>
                 </Link>
-                <div className="flex items-center gap-4">
-                    {/* Theme Toggle Removed - Dark Mode Enforced */}
+                <div className="flex items-center gap-6">
                     {user && (
                         <>
-                            <span className="text-sm font-medium bg-indigo-50 text-indigo-700 dark:bg-indigo-900 dark:text-indigo-200 px-3 py-1 rounded-full uppercase">
+                            <span className="text-[10px] font-black bg-white/5 border border-white/10 text-primary px-4 py-1.5 rounded-full uppercase tracking-widest shadow-xl">
                                 {user.role}
                             </span>
                             <button
                                 onClick={handleLogout}
-                                className="text-gray-500 hover:text-red-600 dark:text-gray-400 transition-colors"
+                                className="text-textSecondary hover:text-error transition-all hover:scale-110 active:scale-95"
                             >
-                                <i className="fas fa-sign-out-alt"></i>
+                                <i className="fas fa-power-off text-xl"></i>
                             </button>
                         </>
                     )}

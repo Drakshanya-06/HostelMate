@@ -181,7 +181,7 @@ export const payFee = async (req, res) => {
             }
 
             student.feeStatus = 'pending';
-            student.paymentMethod = 'CASH';
+            student.paymentMethod = req.body.method || 'CASH';
             student.lastPaymentDetails = {
                 amount: req.body.amount || student.pendingFee,
                 date: new Date()

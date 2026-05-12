@@ -19,7 +19,7 @@ const studentSchema = new mongoose.Schema({
     hasLaundry: { type: Boolean, default: false },
     hasGym: { type: Boolean, default: false },
     feeStatus: { type: String, enum: ['unpaid', 'pending', 'paid'], default: 'unpaid' },
-    paymentMethod: { type: String, enum: ['CASH', 'NONE'], default: 'NONE' },
+    paymentMethod: { type: String, enum: ['CASH', 'UPI', 'NONE'], default: 'NONE' },
     lastPaymentDetails: {
         amount: Number,
         date: Date

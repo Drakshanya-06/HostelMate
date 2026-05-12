@@ -11,7 +11,7 @@ const guestRequestSchema = new mongoose.Schema({
     wantsLaundry: { type: Boolean, default: false },
     feeStatus: { type: String, enum: ['unpaid', 'pending', 'paid'], default: 'unpaid' },
     totalFee: { type: Number, default: 0 },
-    paymentMethod: { type: String, enum: ['CASH', 'NONE'], default: 'NONE' },
+    paymentMethod: { type: String, enum: ['CASH', 'UPI', 'NONE'], default: 'NONE' },
     actionDate: { type: String },
     actionBy: { type: String },
     otp: { type: String }, // For guest login/verification

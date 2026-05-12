@@ -56,7 +56,7 @@ export const generateReceiptPDF = (data) => {
 
         // Table Content
         doc.fontSize(12)
-            .text('Hostel Fee - Cash Payment', 60, 280)
+            .text('Hostel Fee - Online/Cash Payment', 60, 280)
             .text(`Rs. ${data.amount}`, 500, 280);
 
         doc.moveTo(50, 310)

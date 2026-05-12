@@ -71,7 +71,7 @@ const FeeReceipt = ({ student }) => {
     return (
         <button
             onClick={generatePDF}
-            className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+            className="flex items-center gap-2 bg-primary hover:bg-indigo-700 text-white px-4 py-2 rounded-lg text-sm font-normal transition-colors"
         >
             <i className="fas fa-download"></i>
             {t('downloadReceipt')}

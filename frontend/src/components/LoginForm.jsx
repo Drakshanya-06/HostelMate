@@ -30,31 +30,43 @@ const LoginForm = ({ role, onLogin, onForgotPassword }) => {
     };
 
     return (
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-8">
             <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email Address</label>
-                <input
-                    type="email"
-                    required
-                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                />
+                <label className="block text-[10px] font-black text-textSecondary uppercase tracking-[0.2em] mb-3 ml-1">Identity Correspondence</label>
+                <div className="relative group">
+                    <div className="absolute inset-y-0 left-0 pl-6 flex items-center pointer-events-none">
+                        <i className="fas fa-envelope text-textSecondary group-focus-within:text-primary transition-colors"></i>
+                    </div>
+                    <input
+                        type="email"
+                        required
+                        className="w-full pl-14 pr-6 py-4 bg-surface border border-white/5 rounded-2xl focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all font-bold text-sm shadow-inner"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        placeholder="jane@example.com"
+                    />
+                </div>
             </div>
 
             {step === 'CREDENTIALS' && (
                 <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Password</label>
-                    <input
-                        type="password"
-                        required
-                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                    />
-                    <div className="flex justify-end mt-1">
-                        <button type="button" onClick={onForgotPassword} className="text-xs text-indigo-600 hover:underline dark:text-indigo-400">
-                            Forgot Password?
+                    <label className="block text-[10px] font-black text-textSecondary uppercase tracking-[0.2em] mb-3 ml-1">Access Phrase</label>
+                    <div className="relative group">
+                        <div className="absolute inset-y-0 left-0 pl-6 flex items-center pointer-events-none">
+                            <i className="fas fa-lock text-textSecondary group-focus-within:text-primary transition-colors"></i>
+                        </div>
+                        <input
+                            type="password"
+                            required
+                            className="w-full pl-14 pr-6 py-4 bg-surface border border-white/5 rounded-2xl focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all font-bold text-sm shadow-inner"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            placeholder="••••••••"
+                        />
+                    </div>
+                    <div className="flex justify-end mt-3 px-1">
+                        <button type="button" onClick={onForgotPassword} className="text-[10px] font-black text-primary uppercase tracking-widest hover:text-primary-hover transition-colors">
+                            Recover Access?
                         </button>
                     </div>
                 </div>
@@ -62,24 +74,29 @@ const LoginForm = ({ role, onLogin, onForgotPassword }) => {
 
             {step === 'OTP' && (
                 <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Enter OTP</label>
+                    <label className="block text-[10px] font-black text-textSecondary uppercase tracking-[0.2em] mb-3 ml-1">Security Sequence</label>
                     <input
                         type="text"
                         required
-                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                        className="w-full px-6 py-6 bg-surface border border-white/5 rounded-3xl focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all tracking-[0.5em] text-center text-4xl font-black text-primary shadow-inner"
                         value={otp}
                         onChange={(e) => setOtp(e.target.value)}
+                        placeholder="••••"
                     />
                 </div>
             )}
 
-            {message && <p className="text-red-500 text-sm text-center">{message}</p>}
+            {message && (
+                <div className="bg-danger/10 border border-danger/20 text-danger p-4 rounded-xl text-[10px] font-black uppercase tracking-widest text-center animate-shake">
+                    <i className="fas fa-exclamation-triangle mr-2"></i> {message}
+                </div>
+            )}
 
             <button
                 type="submit"
-                className="w-full bg-indigo-600 text-white py-2.5 rounded-lg hover:bg-indigo-700 font-medium transition-colors"
+                className="w-full bg-primary text-white py-5 rounded-[1.5rem] font-black text-xs uppercase tracking-[0.3em] hover:bg-primary-hover shadow-2xl shadow-primary/30 transition-all hover:scale-[1.02] active:scale-95"
             >
-                {step === 'CREDENTIALS' ? 'Login' : 'Verify OTP'}
+                {step === 'CREDENTIALS' ? 'Initialize Access' : 'Validate Node'} <i className={`fas ${step === 'CREDENTIALS' ? 'fa-sign-in-alt' : 'fa-check-circle'} ml-2`}></i>
             </button>
         </form>
     );

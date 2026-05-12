@@ -8,11 +8,11 @@ const ThemeToggle = () => {
     return (
         <button
             onClick={toggleTheme}
-            className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+            className="p-2 rounded-full hover:bg-sidebar :bg-surface transition-colors"
             title="Toggle Theme"
         >
             {theme === 'light' ?
-                <Moon className="w-5 h-5 text-gray-600 dark:text-gray-300" /> :
+                <Moon className="w-5 h-5 text-textSecondary " /> :
                 <Sun className="w-5 h-5 text-yellow-400" />
             }
         </button>

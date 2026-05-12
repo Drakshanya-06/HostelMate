@@ -84,25 +84,25 @@ const App = () => {
         <ThemeProvider>
             <LanguageProvider>
                 <HashRouter>
-                    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors flex flex-col">
-                        <nav className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-6 py-4 flex justify-between items-center sticky top-0 z-50 shadow-sm">
+                    <div className="min-h-screen bg-background  transition-colors flex flex-col">
+                        <nav className="bg-surface  border-b border-sidebar  px-6 py-4 flex justify-between items-center sticky top-0 z-50 shadow-sm">
                             <div className="flex items-center gap-2">
-                                <div className="bg-indigo-600 text-white p-2 rounded-lg">
+                                <div className="bg-primary text-white p-2 rounded-lg">
                                     <i className="fas fa-hotel"></i>
                                 </div>
-                                <h1 className="text-xl font-bold text-gray-800 dark:text-white">HostelWise</h1>
+                                <h1 className="text-xl font-normal text-textPrimary ">HostelWise</h1>
                             </div>
                             <div className="flex items-center gap-4">
                                 <LanguageSelector />
                                 <ThemeToggle />
                                 {user && (
                                     <>
-                                        <span className="text-sm font-medium bg-indigo-50 text-indigo-700 dark:bg-indigo-900 dark:text-indigo-200 px-3 py-1 rounded-full uppercase">
+                                        <span className="text-sm font-normal bg-indigo-50 text-indigo-700   px-3 py-1 rounded-full uppercase">
                                             {user.role}
                                         </span>
                                         <button
                                             onClick={handleLogout}
-                                            className="text-gray-500 hover:text-red-600 dark:text-gray-400 transition-colors"
+                                            className="text-textSecondary hover:text-red-600  transition-colors"
                                         >
                                             <i className="fas fa-sign-out-alt"></i>
                                         </button>
