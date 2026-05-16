@@ -28,6 +28,12 @@ export const authService = {
             body: JSON.stringify({ email, otp })
         });
 
+        const contentType = response.headers.get("content-type");
+        if (!contentType || !contentType.includes("application/json")) {
+            const text = await response.text();
+            throw new Error(`Unexpected server response: ${text.substring(0, 100)}`);
+        }
+
         const data = await response.json();
         if (!response.ok) throw new Error(data.message || 'Verification failed');
         return data;
@@ -41,6 +47,12 @@ export const authService = {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email, password })
         });
+
+        const contentType = response.headers.get("content-type");
+        if (!contentType || !contentType.includes("application/json")) {
+            const text = await response.text();
+            throw new Error(`Unexpected server response: ${text.substring(0, 100)}`);
+        }
 
         const data = await response.json();
 
@@ -57,11 +69,18 @@ export const authService = {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email }),
         });
-        if (!response.ok) {
-            const error = await response.json();
-            throw new Error(error.message || 'Failed to send reset OTP');
+
+        const contentType = response.headers.get("content-type");
+        if (!contentType || !contentType.includes("application/json")) {
+            const text = await response.text();
+            throw new Error(`Unexpected server response: ${text.substring(0, 100)}`);
         }
-        return response.json();
+
+        const data = await response.json();
+        if (!response.ok) {
+            throw new Error(data.message || 'Failed to send reset OTP');
+        }
+        return data;
     },
 
     async verifyResetOtp(email, otp) {
@@ -70,24 +89,38 @@ export const authService = {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email, otp }),
         });
-        if (!response.ok) {
-            const error = await response.json();
-            throw new Error(error.message || 'OTP verification failed');
+
+        const contentType = response.headers.get("content-type");
+        if (!contentType || !contentType.includes("application/json")) {
+            const text = await response.text();
+            throw new Error(`Unexpected server response: ${text.substring(0, 100)}`);
         }
-        return response.json();
+
+        const data = await response.json();
+        if (!response.ok) {
+            throw new Error(data.message || 'OTP verification failed');
+        }
+        return data;
     },
 
-    async resetPassword(data) {
+    async resetPassword(resetData) {
         const response = await fetch(`${API_URL}/reset-password`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data),
+            body: JSON.stringify(resetData),
         });
-        if (!response.ok) {
-            const error = await response.json();
-            throw new Error(error.message || 'Password reset failed');
+
+        const contentType = response.headers.get("content-type");
+        if (!contentType || !contentType.includes("application/json")) {
+            const text = await response.text();
+            throw new Error(`Unexpected server response: ${text.substring(0, 100)}`);
         }
-        return response.json();
+
+        const responseData = await response.json();
+        if (!response.ok) {
+            throw new Error(responseData.message || 'Password reset failed');
+        }
+        return responseData;
     }
 };
 

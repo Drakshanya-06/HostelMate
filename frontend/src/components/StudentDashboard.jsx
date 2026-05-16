@@ -4,6 +4,7 @@ import { useTheme } from '../context/ThemeContext';
 import { Link } from 'react-router-dom';
 import FeeReceipt from './FeeReceipt';
 import { jsPDF } from 'jspdf';
+import QRCodeCanvas from './QRCodeCanvas';
 import { GUEST_PRICING, MOCK_STUDENTS, MOCK_ROOMS, MOCK_COMPLAINTS, MOCK_LEAVES, MOCK_ATTENDANCE } from '../constants';
 
 const StudentDashboard = ({ student, announcements, onLogout, complaints: allComplaints, onAddComplaint, onUpdateProfile, onRefreshProfile }) => {
@@ -172,7 +173,6 @@ const StudentDashboard = ({ student, announcements, onLogout, complaints: allCom
                         { id: 'COMPLAINTS', icon: 'fa-circle-exclamation', label: 'Support' },
                         { id: 'LEAVE', icon: 'fa-door-open', label: 'Leave' },
                         { id: 'ATTENDANCE', icon: 'fa-calendar-check', label: 'Log' },
-                        { id: 'EXAMS', icon: 'fa-clipboard-list', label: 'Exams' },
                         { id: 'PROFILE', icon: 'fa-user-circle', label: 'Profile' },
                     ].map(item => (
                         <button
@@ -711,59 +711,6 @@ const StudentDashboard = ({ student, announcements, onLogout, complaints: allCom
                 )}
 
 
-                {activeTab === 'EXAMS' && (
-                    <div className="bg-surface/60 /60 backdrop-blur-xl p-12 rounded-[2.5rem] shadow-2xl border border-white/50 /50 animate-in fade-in zoom-in duration-700">
-                        <div className="flex justify-between items-center mb-12">
-                            <div>
-                                <h3 className="text-3xl font-black text-textPrimary  tracking-tight flex items-center gap-4">
-                                    <i className="fas fa-graduation-cap text-primary"></i> My Exam Schedule
-                                </h3>
-                                <p className="text-textSecondary  font-normal mt-2">Upcoming assessments and examinations</p>
-                            </div>
-                            <button
-                                onClick={handleDownloadHallTicket}
-                                className="bg-primary text-white px-6 py-3 rounded-xl font-normal text-xs shadow-lg shadow-indigo-500/20 hover:bg-indigo-700 transition-all"
-                            >
-                                <i className="fas fa-download mr-2"></i>Download Hall Ticket
-                            </button>
-                        </div>
-
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                            {[
-                                { subject: "Engineering Mathematics IV", code: "MAT101", date: "Jan 10, 2025", time: "09:00 AM - 12:00 PM", venue: "LH-101" },
-                                { subject: "Data Structures & Algorithms", code: "CS201", date: "Jan 12, 2025", time: "02:00 PM - 05:00 PM", venue: "LH-204" },
-                                { subject: "Digital Logic Design", code: "EC304", date: "Jan 15, 2025", time: "09:00 AM - 12:00 PM", venue: "LH-105" },
-                                { subject: "Database Management Systems", code: "CS302", date: "Jan 18, 2025", time: "02:00 PM - 05:00 PM", venue: "LH-302" },
-                                { subject: "Computer Networks", code: "CS305", date: "Jan 21, 2025", time: "09:00 AM - 12:00 PM", venue: "LH-201" }
-                            ].map((exam, i) => (
-                                <div key={i} className="group bg-background  rounded-[2rem] p-8 border border-slate-100  hover:border-indigo-500 hover:shadow-xl transition-all relative overflow-hidden">
-                                    <div className="absolute top-0 right-0 w-24 h-24 bg-indigo-50 /20 rounded-bl-[4rem] group-hover:scale-150 transition-transform duration-500"></div>
-
-                                    <span className="inline-block px-3 py-1 rounded-lg bg-indigo-100 text-primary text-[10px] font-black uppercase tracking-widest mb-4">
-                                        {exam.code}
-                                    </span>
-
-                                    <h4 className="text-xl font-black text-textPrimary  mb-2 leading-tight">{exam.subject}</h4>
-
-                                    <div className="space-y-3 mt-6 relative z-10">
-                                        <div className="flex items-center gap-3 text-textSecondary  text-sm font-normal">
-                                            <i className="fas fa-calendar-day w-5 text-indigo-500"></i>
-                                            {exam.date}
-                                        </div>
-                                        <div className="flex items-center gap-3 text-textSecondary  text-sm font-normal">
-                                            <i className="fas fa-clock w-5 text-indigo-500"></i>
-                                            {exam.time}
-                                        </div>
-                                        <div className="flex items-center gap-3 text-textSecondary  text-sm font-normal">
-                                            <i className="fas fa-map-marker-alt w-5 text-indigo-500"></i>
-                                            Venue: {exam.venue}
-                                        </div>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                )}
 
 
                 {activeTab === 'DIGITAL_IDS' && (
@@ -791,11 +738,21 @@ const StudentDashboard = ({ student, announcements, onLogout, complaints: allCom
                                     <div className="p-8 flex items-center gap-8">
                                         <div className="w-32 h-32 rounded-2xl border-4 border-slate-100  overflow-hidden shadow-xl ring-4 ring-indigo-500/10">
                                             {student?.profilePhoto ? (
-                                                <img src={student.profilePhoto} alt="Security" className="w-full h-full object-cover" />
+                                                <img
+                                                    src={student.profilePhoto}
+                                                    alt={`${student?.firstName} ${student?.lastName}`}
+                                                    className="w-full h-full object-cover"
+                                                    onError={(e) => {
+                                                        e.target.onerror = null;
+                                                        e.target.src = `https://ui-avatars.com/api/?name=${student?.firstName}+${student?.lastName}&background=6366f1&color=fff&size=200&bold=true`;
+                                                    }}
+                                                />
                                             ) : (
-                                                <div className="w-full h-full bg-background  flex items-center justify-center text-slate-300 text-4xl">
-                                                    <i className="fas fa-user-shield"></i>
-                                                </div>
+                                                <img
+                                                    src={`https://ui-avatars.com/api/?name=${student?.firstName}+${student?.lastName}&background=6366f1&color=fff&size=200&bold=true`}
+                                                    alt={`${student?.firstName} ${student?.lastName}`}
+                                                    className="w-full h-full object-cover"
+                                                />
                                             )}
                                         </div>
                                         <div className="flex-1 space-y-4">
@@ -815,28 +772,29 @@ const StudentDashboard = ({ student, announcements, onLogout, complaints: allCom
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="px-8 pb-8 flex justify-between items-end">
-                                        <div className="flex-1 mr-8 bg-background  p-4 rounded-2xl border border-slate-100  flex items-center justify-center">
-                                            <div className="flex gap-1">
-                                                {[...Array(20)].map((_, i) => (
-                                                    <div key={i} className={`w-[2px] h-8 bg-background  ${i % 3 === 0 ? 'h-10 opacity-100' : 'opacity-40'}`}></div>
+                                    <div className="px-8 pb-8 flex justify-between items-end gap-4">
+                                        {/* Barcode */}
+                                        <div className="flex-1 bg-white p-3 rounded-2xl border border-slate-200 flex items-center justify-center overflow-hidden">
+                                            <img
+                                                src={`https://barcodeapi.org/api/128/${student?.studentId || 'HOSTELMATE'}`}
+                                                alt="Barcode"
+                                                className="h-10 w-full object-contain"
+                                                onError={(e) => { e.target.style.display='none'; e.target.nextSibling.style.display='flex'; }}
+                                            />
+                                            <div style={{display:'none'}} className="flex gap-0.5 items-end h-10">
+                                                {[...Array(24)].map((_, i) => (
+                                                    <div key={i} style={{height: `${40 + (i%4)*8}%`, width:'3px', background: i%3===0?'#1e1b4b':'#4338ca'}} className="rounded-sm"></div>
                                                 ))}
                                             </div>
                                         </div>
-                                        <div className="w-20 h-20 bg-surface p-2 rounded-xl shadow-lg border border-slate-100">
-                                            <div className="w-full h-full border-2 border-slate-900 flex items-center justify-center relative">
-                                                <div className="w-full h-full border border-sidebar p-0.5 flex items-center justify-center overflow-hidden">
-                                                    <img
-                                                        src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=MESS_${student?.studentId}`}
-                                                        alt="QR Code"
-                                                        className="w-full h-full object-contain"
-                                                    />
-                                                </div>
-                                                <div className="absolute top-0 right-0 w-2 h-2 bg-background"></div>
-                                                <div className="absolute top-0 left-0 w-2 h-2 bg-background"></div>
-                                                <div className="absolute bottom-0 right-0 w-2 h-2 bg-background"></div>
-                                                <div className="absolute bottom-0 left-0 w-2 h-2 bg-background"></div>
-                                            </div>
+                                        {/* QR Code - offline, no network needed */}
+                                        <div className="w-20 h-20 bg-white p-1.5 rounded-xl shadow-lg border border-slate-300 flex-shrink-0 overflow-hidden">
+                                            <QRCodeCanvas
+                                                value={`MESS_${student?.studentId || 'HOSTELMATE'}`}
+                                                size={68}
+                                                fgColor="#1e1b4b"
+                                                bgColor="#ffffff"
+                                            />
                                         </div>
                                     </div>
                                 </div>
@@ -866,11 +824,21 @@ const StudentDashboard = ({ student, announcements, onLogout, complaints: allCom
                                     <div className="p-8 flex items-center gap-8">
                                         <div className="w-32 h-32 rounded-2xl border-4 border-slate-100  overflow-hidden shadow-xl ring-4 ring-emerald-500/10">
                                             {student?.profilePhoto ? (
-                                                <img src={student.profilePhoto} alt="Security" className="w-full h-full object-cover" />
+                                                <img
+                                                    src={student.profilePhoto}
+                                                    alt={`${student?.firstName} ${student?.lastName}`}
+                                                    className="w-full h-full object-cover"
+                                                    onError={(e) => {
+                                                        e.target.onerror = null;
+                                                        e.target.src = `https://ui-avatars.com/api/?name=${student?.firstName}+${student?.lastName}&background=059669&color=fff&size=200&bold=true`;
+                                                    }}
+                                                />
                                             ) : (
-                                                <div className="w-full h-full bg-background  flex items-center justify-center text-slate-300 text-4xl">
-                                                    <i className="fas fa-user-shield"></i>
-                                                </div>
+                                                <img
+                                                    src={`https://ui-avatars.com/api/?name=${student?.firstName}+${student?.lastName}&background=059669&color=fff&size=200&bold=true`}
+                                                    alt={`${student?.firstName} ${student?.lastName}`}
+                                                    className="w-full h-full object-cover"
+                                                />
                                             )}
                                         </div>
                                         <div className="flex-1 space-y-4">
@@ -890,24 +858,24 @@ const StudentDashboard = ({ student, announcements, onLogout, complaints: allCom
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="px-8 pb-8 flex justify-between items-end">
-                                        <div className="flex-1 mr-8 bg-background p-5 rounded-2xl border border-slate-800 flex flex-col justify-center">
+                                    <div className="px-8 pb-8 flex justify-between items-end gap-4">
+                                        <div className="flex-1 bg-surface/80 p-4 rounded-2xl border border-slate-700 flex flex-col justify-center">
                                             <div className="flex justify-between items-center mb-2">
                                                 <span className="text-[8px] font-black text-slate-400 uppercase tracking-[0.2em]">Usage Audit</span>
                                                 <span className="text-[10px] font-black text-white italic">12 / 20</span>
                                             </div>
-                                            <div className="w-full h-1.5 bg-surface rounded-full overflow-hidden">
+                                            <div className="w-full h-1.5 bg-background rounded-full overflow-hidden">
                                                 <div className="w-[60%] h-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]"></div>
                                             </div>
                                         </div>
-                                        <div className="w-20 h-20 bg-surface p-2 rounded-xl shadow-lg border border-slate-100">
-                                            <div className="w-full h-full border-2 border-slate-900 flex items-center justify-center relative p-0.5 overflow-hidden">
-                                                <img
-                                                    src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=LAUNDRY_${student?.studentId}`}
-                                                    alt="Barcode"
-                                                    className="w-full h-full object-contain"
-                                                />
-                                            </div>
+                                        {/* QR Code - offline, no network needed */}
+                                        <div className="w-20 h-20 bg-white p-1.5 rounded-xl shadow-lg border border-slate-300 flex-shrink-0 overflow-hidden">
+                                            <QRCodeCanvas
+                                                value={`LAUNDRY_${student?.studentId || 'HOSTELMATE'}`}
+                                                size={68}
+                                                fgColor="#065f46"
+                                                bgColor="#ffffff"
+                                            />
                                         </div>
                                     </div>
                                 </div>
@@ -937,11 +905,21 @@ const StudentDashboard = ({ student, announcements, onLogout, complaints: allCom
                                     <div className="p-8 flex items-center gap-8">
                                         <div className="w-32 h-32 rounded-2xl border-4 border-slate-100  overflow-hidden shadow-xl ring-4 ring-rose-500/10">
                                             {student?.profilePhoto ? (
-                                                <img src={student.profilePhoto} alt="Security" className="w-full h-full object-cover" />
+                                                <img
+                                                    src={student.profilePhoto}
+                                                    alt={`${student?.firstName} ${student?.lastName}`}
+                                                    className="w-full h-full object-cover"
+                                                    onError={(e) => {
+                                                        e.target.onerror = null;
+                                                        e.target.src = `https://ui-avatars.com/api/?name=${student?.firstName}+${student?.lastName}&background=be123c&color=fff&size=200&bold=true`;
+                                                    }}
+                                                />
                                             ) : (
-                                                <div className="w-full h-full bg-background  flex items-center justify-center text-slate-300 text-4xl">
-                                                    <i className="fas fa-user-shield"></i>
-                                                </div>
+                                                <img
+                                                    src={`https://ui-avatars.com/api/?name=${student?.firstName}+${student?.lastName}&background=be123c&color=fff&size=200&bold=true`}
+                                                    alt={`${student?.firstName} ${student?.lastName}`}
+                                                    className="w-full h-full object-cover"
+                                                />
                                             )}
                                         </div>
                                         <div className="flex-1 space-y-4">
@@ -961,23 +939,19 @@ const StudentDashboard = ({ student, announcements, onLogout, complaints: allCom
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="px-8 pb-8 flex justify-between items-end">
-                                        <div className="flex-1 mr-8 bg-background  p-4 rounded-2xl border border-slate-100  flex items-center justify-center">
-                                            <div className="flex gap-2">
-                                                <i className="fas fa-heart-pulse text-rose-500 animate-pulse"></i>
-                                                <span className="text-xs font-black text-textPrimary ">Daily Streak: 4 Days</span>
-                                            </div>
+                                    <div className="px-8 pb-8 flex justify-between items-end gap-4">
+                                        <div className="flex-1 bg-surface/80 p-4 rounded-2xl border border-slate-700 flex items-center justify-center gap-3">
+                                            <i className="fas fa-heart-pulse text-rose-500 animate-pulse text-lg"></i>
+                                            <span className="text-xs font-black text-textPrimary">Daily Streak: 4 Days</span>
                                         </div>
-                                        <div className="w-20 h-20 bg-surface p-2 rounded-xl shadow-lg border border-slate-100">
-                                            <div className="w-full h-full border-2 border-slate-900 flex items-center justify-center relative">
-                                                <div className="w-full h-full border border-sidebar p-0.5 flex items-center justify-center overflow-hidden">
-                                                    <img
-                                                        src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=GYM_${student?.studentId}`}
-                                                        alt="QR Code"
-                                                        className="w-full h-full object-contain"
-                                                    />
-                                                </div>
-                                            </div>
+                                        {/* QR Code - offline, no network needed */}
+                                        <div className="w-20 h-20 bg-white p-1.5 rounded-xl shadow-lg border border-slate-300 flex-shrink-0 overflow-hidden">
+                                            <QRCodeCanvas
+                                                value={`GYM_${student?.studentId || 'HOSTELMATE'}`}
+                                                size={68}
+                                                fgColor="#881337"
+                                                bgColor="#ffffff"
+                                            />
                                         </div>
                                     </div>
                                 </div>
@@ -1005,11 +979,21 @@ const StudentDashboard = ({ student, announcements, onLogout, complaints: allCom
                                     <div className="relative group">
                                         <div className="w-48 h-48 rounded-[2.5rem] border-[6px] border-white  overflow-hidden shadow-2xl ring-4 ring-indigo-500/10">
                                             {student?.profilePhoto ? (
-                                                <img src={student.profilePhoto} alt="Profile" className="w-full h-full object-cover" />
+                                                <img
+                                                    src={student.profilePhoto}
+                                                    alt="Profile"
+                                                    className="w-full h-full object-cover"
+                                                    onError={(e) => {
+                                                        e.target.onerror = null;
+                                                        e.target.src = `https://ui-avatars.com/api/?name=${student?.firstName}+${student?.lastName}&background=6366f1&color=fff&size=200&bold=true`;
+                                                    }}
+                                                />
                                             ) : (
-                                                <div className="w-full h-full bg-background  flex items-center justify-center text-slate-300 text-6xl">
-                                                    <i className="fas fa-user"></i>
-                                                </div>
+                                                <img
+                                                    src={`https://ui-avatars.com/api/?name=${student?.firstName}+${student?.lastName}&background=6366f1&color=fff&size=200&bold=true`}
+                                                    alt="Profile"
+                                                    className="w-full h-full object-cover"
+                                                />
                                             )}
                                         </div>
                                         <button className="absolute bottom-4 right-4 w-12 h-12 bg-primary text-white rounded-2xl flex items-center justify-center shadow-xl hover:scale-110 transition-all border-4 border-white  opacity-0 group-hover:opacity-100">

@@ -5,8 +5,8 @@
 body {
     margin: 0;
     font-family: 'Plus Jakarta Sans', sans-serif;
-    background-color: theme('colors.background');
-    color: theme('colors.textPrimary');
+    background-color: #020617;
+    color: #F8FAFC;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
@@ -39,11 +39,11 @@ h1, h2, h3, h4, h5, h6 {
     background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-    background: theme('colors.border');
+    background: #1E293B;
     border-radius: 99px;
 }
 ::-webkit-scrollbar-thumb:hover {
-    background: theme('colors.muted');
+    background: #334155;
 }
 
 @keyframes float {
