@@ -11,7 +11,7 @@ const studentSchema = new mongoose.Schema({
     hostelId: { type: Number, required: true },
     floor: { type: Number, required: true },
     roomNumber: { type: Number, required: true },
-    pendingFee: { type: Number, default: 21600 },
+    pendingFee: { type: Number, default: 50000 },
     messBill: { type: Number, default: 5000 },
     gymBill: { type: Number, default: 2000 },
     laundryBill: { type: Number, default: 1000 },

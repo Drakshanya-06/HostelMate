@@ -32,7 +32,7 @@ const createStudent = async () => {
                 floor: 1,
                 roomNumber: 101,
                 isVerified: true,
-                pendingFee: 21600,
+                pendingFee: 50000,
                 messBill: 5000,
                 gymBill: 2000,
                 laundryBill: 1000,

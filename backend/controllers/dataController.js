@@ -25,7 +25,7 @@ export const getDashboardData = async (req, res) => {
             phone: s.phone,
             status: s.status,
             floor: s.floor,
-            pendingFee: (s.feeStatus === 'unpaid' && (s.pendingFee === 0 || !s.pendingFee || s.pendingFee === 30000)) ? 21600 : s.pendingFee,
+            pendingFee: (s.feeStatus === 'unpaid' && (s.pendingFee === 0 || !s.pendingFee || s.pendingFee === 30000 || s.pendingFee === 21600)) ? 50000 : s.pendingFee,
             messBill: s.messBill || (s.feeStatus === 'unpaid' ? 5000 : 0),
             gymBill: s.gymBill || (s.feeStatus === 'unpaid' ? 2000 : 0)
         }));

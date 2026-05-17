@@ -343,7 +343,7 @@ const StudentDashboard = ({ student, announcements, onLogout, complaints: allCom
 
                                             <div className="mt-4 space-y-2 opacity-80">
                                                 <div className="flex justify-between text-[9px] font-black uppercase">
-                                                    <span>Hostel Fee (21.6k)</span>
+                                                    <span>Hostel Fee (50k)</span>
                                                     <span>₹{student?.pendingFee || 0}</span>
                                                 </div>
                                                 <div className="flex justify-between text-[9px] font-black uppercase">
@@ -425,6 +425,18 @@ const StudentDashboard = ({ student, announcements, onLogout, complaints: allCom
 
                                                     <div className="space-y-4">
                                                         <button
+                                                            onClick={() => {
+                                                                if (paymentAmount <= 0) {
+                                                                    addToast('Please enter a valid amount', 'error');
+                                                                    return;
+                                                                }
+                                                                setPaymentStep('UPI_DETAILS');
+                                                            }}
+                                                            className="w-full py-4 rounded-xl bg-indigo-600 text-white font-black uppercase tracking-widest text-sm hover:bg-indigo-700 transition-all shadow-lg flex items-center justify-center gap-2"
+                                                        >
+                                                            <i className="fas fa-qrcode"></i> Show UPI QR
+                                                        </button>
+                                                        <button
                                                             onClick={async () => {
                                                                 if (paymentAmount <= 0) {
                                                                     addToast('Please enter a valid amount', 'error');
@@ -440,7 +452,7 @@ const StudentDashboard = ({ student, announcements, onLogout, complaints: allCom
                                                                             'Authorization': `Bearer ${localStorage.getItem('token')}`,
                                                                             'Content-Type': 'application/json'
                                                                         },
-                                                                        body: JSON.stringify({ amount: paymentAmount })
+                                                                        body: JSON.stringify({ amount: paymentAmount, method: 'CASH' })
                                                                     });
                                                                     if (res.ok) {
                                                                         setPaymentStep('SUCCESS');
@@ -455,12 +467,74 @@ const StudentDashboard = ({ student, announcements, onLogout, complaints: allCom
                                                                     setPaymentStep('SELECT');
                                                                 }
                                                             }}
-                                                            className="w-full py-4 rounded-xl bg-primary text-white font-black uppercase tracking-widest text-sm hover:bg-indigo-700 transition-all shadow-lg flex items-center justify-center gap-2"
+                                                            className="w-full py-4 rounded-xl bg-slate-800 text-white font-black uppercase tracking-widest text-sm hover:bg-slate-900 transition-all shadow-lg flex items-center justify-center gap-2"
                                                         >
-                                                            <i className="fas fa-check-circle"></i> Confirm Cash Payment
+                                                            <i className="fas fa-money-bill-wave"></i> Pay with Cash
                                                         </button>
-                                                        <p className="text-[10px] text-center text-slate-400 font-normal uppercase tracking-widest">Visit the warden office after confirmation</p>
+                                                        <p className="text-[10px] text-center text-slate-400 font-normal uppercase tracking-widest">Visit the warden office after cash confirmation, or wait for UPI approval.</p>
                                                     </div>
+                                                </div>
+                                            )}
+
+                                            {paymentStep === 'UPI_DETAILS' && (
+                                                <div className="py-6 text-center animate-in fade-in zoom-in duration-300">
+                                                    <h4 className="font-black text-textPrimary text-lg mb-2">Scan to Pay</h4>
+                                                    <p className="text-slate-400 text-xs font-normal uppercase tracking-widest mb-6">Use any UPI app</p>
+                                                    
+                                                    <div className="bg-white p-4 rounded-3xl inline-block shadow-lg border-4 border-indigo-50 mb-6">
+                                                        <QRCodeCanvas
+                                                            value={`upi://pay?pa=7009879433@axl&pn=HostelMate&am=${paymentAmount}&cu=INR`}
+                                                            size={160}
+                                                            fgColor="#1e1b4b"
+                                                            bgColor="#ffffff"
+                                                            level="H"
+                                                        />
+                                                    </div>
+                                                    
+                                                    <div className="bg-indigo-50/50 rounded-2xl p-4 mb-8">
+                                                        <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">UPI ID</div>
+                                                        <div className="text-indigo-600 font-bold tracking-wider text-lg">7009879433@axl</div>
+                                                        <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-2 mb-1">Amount</div>
+                                                        <div className="text-textPrimary font-black text-xl italic">₹{paymentAmount}</div>
+                                                    </div>
+
+                                                    <button
+                                                        onClick={async () => {
+                                                            setPaymentMethod('UPI');
+                                                            setPaymentStep('PROCESSING');
+
+                                                            try {
+                                                                const res = await fetch('/api/student/pay-fee', {
+                                                                    method: 'POST',
+                                                                    headers: {
+                                                                        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                                                                        'Content-Type': 'application/json'
+                                                                    },
+                                                                    body: JSON.stringify({ amount: paymentAmount, method: 'UPI' })
+                                                                });
+                                                                if (res.ok) {
+                                                                    setPaymentStep('SUCCESS');
+                                                                    if (onRefreshProfile) onRefreshProfile();
+                                                                } else {
+                                                                    const err = await res.json();
+                                                                    addToast(err.message || 'Payment failed', 'error');
+                                                                    setPaymentStep('UPI_DETAILS');
+                                                                }
+                                                            } catch (e) {
+                                                                addToast('Payment failed to record', 'error');
+                                                                setPaymentStep('UPI_DETAILS');
+                                                            }
+                                                        }}
+                                                        className="w-full py-4 rounded-xl bg-indigo-600 text-white font-black uppercase tracking-widest text-sm hover:bg-indigo-700 transition-all shadow-lg flex items-center justify-center gap-2"
+                                                    >
+                                                        <i className="fas fa-check-double"></i> I Have Paid
+                                                    </button>
+                                                    <button
+                                                        onClick={() => setPaymentStep('SELECT')}
+                                                        className="mt-4 text-xs font-black text-slate-400 uppercase tracking-widest hover:text-indigo-600 transition-colors"
+                                                    >
+                                                        Cancel
+                                                    </button>
                                                 </div>
                                             )}
 
@@ -478,7 +552,11 @@ const StudentDashboard = ({ student, announcements, onLogout, complaints: allCom
                                                         <i className="fas fa-check"></i>
                                                     </div>
                                                     <h4 className="font-black text-textPrimary  text-xl mb-2">Payment Recorded!</h4>
-                                                    <p className="text-textSecondary  text-sm mb-8">Please visit the warden office to handover cash. Once approved, you'll receive your receipt via email.</p>
+                                                    <p className="text-textSecondary  text-sm mb-8">
+                                                        {paymentMethod === 'CASH' 
+                                                            ? "Please visit the warden office to handover cash. Once approved, you'll receive your receipt via email."
+                                                            : "Your UPI transaction is pending approval. Once verified, you'll receive your receipt via email."}
+                                                    </p>
                                                     <button
                                                         onClick={() => {
                                                             setShowPaymentModal(false);

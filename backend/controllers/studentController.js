@@ -124,9 +124,9 @@ export const getStudentProfile = async (req, res) => {
         if (student) {
             // Ensure bills and discounted rates are synchronized for all students during this update phase
             let updated = false;
-            // Force update to 21.6k only if null or the old 30k default (NOT if 0, as 0 can be a paid status now)
-            if (student.pendingFee === undefined || student.pendingFee === null || student.pendingFee === 30000) {
-                student.pendingFee = 21600;
+            // Force update to 50k only if null or the old 30k default (NOT if 0, as 0 can be a paid status now)
+            if (student.pendingFee === undefined || student.pendingFee === null || student.pendingFee === 30000 || student.pendingFee === 21600) {
+                student.pendingFee = 50000;
                 updated = true;
             }
             if (!student.messBill && student.messBill !== 0) {
