@@ -1,0 +1,12 @@
+node_modules/
+backend/node_modules/
+frontend/node_modules/
+.env
+.DS_Store
+dist/
+build/
+*.log
+.gemini/
+.agent/
+package-lock.json (ignore this to prevent conflicts if user uses yarn/pnpm later, but usually we keep it. I'll include it in standard ignore just in case)
+# (Actually, better to include standard node ignore)
