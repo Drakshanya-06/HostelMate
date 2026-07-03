@@ -39,5 +39,5 @@ userSchema.pre('save', async function (next) {
     this.password = await bcrypt.hash(this.password, salt);
 });
 
-const Admin = mongoose.model('Admin', userSchema);
+const Admin = mongoose.models.Admin || mongoose.model('Admin', userSchema);
 export default Admin;

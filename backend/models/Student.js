@@ -56,4 +56,4 @@ studentSchema.pre('save', async function (next) {
     }
 });
 
-export default mongoose.model('Student', studentSchema);
+export default mongoose.models.Student || mongoose.model('Student', studentSchema);

@@ -24,4 +24,4 @@ const guestRequestSchema = new mongoose.Schema({
     }]
 }, { timestamps: true });
 
-export default mongoose.model('Guest', guestRequestSchema);
+export default mongoose.models.Guest || mongoose.model('Guest', guestRequestSchema);

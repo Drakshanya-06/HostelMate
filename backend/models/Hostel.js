@@ -10,4 +10,4 @@ const roomSchema = new mongoose.Schema({
     isVacant: { type: Boolean, default: true }
 }, { timestamps: true });
 
-export default mongoose.model('Hostel', roomSchema);
+export default mongoose.models.Hostel || mongoose.model('Hostel', roomSchema);

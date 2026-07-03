@@ -7,11 +7,11 @@ export default defineConfig(({ mode }) => {
     return {
 
         build: {
-            outDir: '../dist',
-            emptyOutDir: true,
+            outDir: 'dist',
+            emptyOutDir: true
         },
         server: {
-            port: 5000,
+            port: 3000,
             strictPort: true,
             host: '0.0.0.0',
             proxy: {

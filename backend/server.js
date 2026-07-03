@@ -10,12 +10,27 @@ import guestRoutes from './routes/guest.js';
 
 dotenv.config();
 
-connectDB();
+connectDB().catch(err => {
+    console.error('Initial MongoDB connection failed:', err.message);
+});
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
+
+// Database connection verification middleware
+app.use(async (req, res, next) => {
+    try {
+        await connectDB();
+        next();
+    } catch (err) {
+        console.error('Database connection middleware caught error:', err.message);
+        res.status(500).json({
+            message: 'Database connection failed: ' + err.message
+        });
+    }
+});
 
 app.use('/api/auth', authRoutes);
 app.use('/api', dataRoutes);

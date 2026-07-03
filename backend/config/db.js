@@ -14,6 +14,10 @@ const connectDB = async () => {
         return cached.conn;
     }
 
+    if (!process.env.MONGODB_URI) {
+        throw new Error('MONGODB_URI environment variable is missing. Please configure it in your Vercel or environment settings.');
+    }
+
     if (!cached.promise) {
         const opts = {
             bufferCommands: false,
