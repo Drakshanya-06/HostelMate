@@ -1,4 +1,5 @@
 import express from 'express';
+import { otpRequestLimiter } from '../middleware/rateLimit.js';
 import {
     forgotPassword,
     resetPassword,
@@ -7,7 +8,7 @@ import {
 
 const router = express.Router();
 
-router.post('/forgot-password', forgotPassword);
+router.post('/forgot-password', otpRequestLimiter, forgotPassword);
 router.post('/verify-otp', verifyResetOtp);
 router.post('/reset-password', resetPassword);
 

@@ -12,6 +12,18 @@ const seedData = async () => {
         await mongoose.connect(process.env.MONGODB_URI);
         console.log('MongoDB Connected...');
 
+        // Drop collections to clear any stale data or indexes (like unique name_1)
+        const collections = ['admins', 'students', 'guests', 'hostels'];
+        for (const colName of collections) {
+            try {
+                await mongoose.connection.db.dropCollection(colName);
+                console.log(`Dropped collection: ${colName}`);
+            } catch (err) {
+                // Collection might not exist, which is fine
+                console.log(`Collection ${colName} did not exist or could not be dropped`);
+            }
+        }
+
         const wardenEmail = 'warden@example.com';
         const wardenPassword = 'Warden@123';
         const existingWarden = await Admin.findOne({ email: wardenEmail });
@@ -30,6 +42,23 @@ const seedData = async () => {
                 isVerified: true
             });
             console.log('Warden created.');
+            // Additional warden accounts
+            await Admin.create({
+                name: 'Drakshanya',
+                email: 'drakshanyachess@gmail.com',
+                password: 'Sweety2006',
+                role: 'WARDEN',
+                isVerified: true
+            });
+            console.log('Added warden drakshanyachess@gmail.com');
+            await Admin.create({
+                name: 'Harshita Kondamuri',
+                email: 'harshita.kondamuri@gmail.com',
+                password: 'Sweety2006',
+                role: 'WARDEN',
+                isVerified: true
+            });
+            console.log('Added warden harshita.kondamuri@gmail.com');
         }
 
         const students = [

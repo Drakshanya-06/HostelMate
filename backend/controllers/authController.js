@@ -27,7 +27,14 @@ export const forgotPassword = async (req, res) => {
         const otp = Math.floor(1000 + Math.random() * 9000).toString();
 
         // Save OTP
+        // Ensure only one OTP per email
+        await OTP.deleteMany({ email });
         await OTP.create({ email, otp });
+
+        // In development, log OTP to console instead of sending email
+        if (process.env.NODE_ENV !== 'production') {
+            console.info(`🔐 OTP for ${email}: ${otp} (dev mode)`);
+        }
 
         // Send Email
         let emailResult = { success: false };
@@ -95,12 +102,19 @@ export const resetPassword = async (req, res) => {
             return res.status(404).json({ message: 'User not found' });
         }
 
+        // Validate password strength (minimum 6 characters)
+        if (!newPassword || newPassword.length < 6) {
+            return res.status(400).json({ message: 'Password must be at least 6 characters long' });
+        }
         // Set new password (will be hashed by pre('save') hook in model)
         user.password = newPassword;
         await user.save();
-
         // Delete used OTP
-        await OTP.deleteOne({ _id: otpRecord._id });
+        try {
+            await OTP.deleteOne({ _id: otpRecord._id });
+        } catch (e) {
+            console.error('Failed to delete OTP:', e);
+        }
 
         res.json({ message: 'Password reset successful' });
     } catch (error) {

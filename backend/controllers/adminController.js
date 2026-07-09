@@ -5,6 +5,7 @@ import Hostel from '../models/Hostel.js';
 import generateToken from '../utils/generateToken.js';
 import sendEmail from '../utils/sendEmail.js';
 import { generateReceiptPDF } from '../utils/generatePDF.js';
+import bcrypt from 'bcryptjs';
 
 // @desc    Auth Admin/Warden
 // @route   POST /api/admin/login
@@ -13,7 +14,7 @@ export const loginAdmin = async (req, res) => {
     try {
         const { email, password } = req.body;
         const admin = await Admin.findOne({ email });
-        const bcrypt = (await import('bcryptjs')).default;
+
 
         if (admin && (await bcrypt.compare(password, admin.password))) {
             res.json({

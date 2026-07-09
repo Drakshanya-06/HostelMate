@@ -1,5 +1,7 @@
 import Student from '../models/Student.js';
+import bcrypt from 'bcryptjs';
 import generateToken from '../utils/generateToken.js';
+
 import sendEmail from '../utils/sendEmail.js';
 
 // @desc    Register a new student
@@ -64,7 +66,7 @@ export const loginStudent = async (req, res) => {
         // Note: Password check relies on bcrypt compare method on model or manual compare here. 
         // Since I added pre-save, I need a method to match password. OR use bcrypt directly here.
         // I will use bcrypt directly for simplicity.
-        const bcrypt = (await import('bcryptjs')).default;
+
 
         if (student && (await bcrypt.compare(password, student.password))) {
             if (!student.isVerified) {
@@ -122,22 +124,21 @@ export const getStudentProfile = async (req, res) => {
     try {
         let student = await Student.findById(req.user._id);
         if (student) {
-            // Ensure bills and discounted rates are synchronized for all students during this update phase
+            // Set default bills only if they are truly missing (null/undefined)
             let updated = false;
-            // Force update to 50k only if null or the old 30k default (NOT if 0, as 0 can be a paid status now)
-            if (student.pendingFee === undefined || student.pendingFee === null || student.pendingFee === 30000 || student.pendingFee === 21600) {
-                student.pendingFee = 50000;
+            if (student.pendingFee === undefined || student.pendingFee === null) {
+                student.pendingFee = 32000;
                 updated = true;
             }
-            if (!student.messBill && student.messBill !== 0) {
+            if (student.messBill === undefined || student.messBill === null) {
                 student.messBill = 5000;
                 updated = true;
             }
-            if (!student.gymBill && student.gymBill !== 0) {
+            if (student.gymBill === undefined || student.gymBill === null) {
                 student.gymBill = 2000;
                 updated = true;
             }
-            if (!student.laundryBill && student.laundryBill !== 0) {
+            if (student.laundryBill === undefined || student.laundryBill === null) {
                 student.laundryBill = 1000;
                 updated = true;
             }

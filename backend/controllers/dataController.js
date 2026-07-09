@@ -21,13 +21,18 @@ export const getDashboardData = async (req, res) => {
             id: s.studentId || s._id,
             studentId: s.studentId || s._id,
             name: `${s.firstName || ''} ${s.lastName || ''}`.trim(),
+            firstName: s.firstName,
+            lastName: s.lastName,
             roomNumber: s.roomNumber,
             phone: s.phone,
             status: s.status,
             floor: s.floor,
-            pendingFee: (s.feeStatus === 'unpaid' && (s.pendingFee === 0 || !s.pendingFee || s.pendingFee === 30000 || s.pendingFee === 21600)) ? 50000 : s.pendingFee,
-            messBill: s.messBill || (s.feeStatus === 'unpaid' ? 5000 : 0),
-            gymBill: s.gymBill || (s.feeStatus === 'unpaid' ? 2000 : 0)
+            pendingFee: s.pendingFee || 0,
+            messBill: s.messBill || 0,
+            gymBill: s.gymBill || 0,
+            laundryBill: s.laundryBill || 0,
+            feeStatus: s.feeStatus || 'unpaid',
+            profilePhoto: s.profilePhoto || `https://ui-avatars.com/api/?name=${s.firstName}+${s.lastName}&background=random&color=fff&size=200`
         }));
 
         res.json({
