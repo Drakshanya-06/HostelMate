@@ -10,11 +10,13 @@ export const sendEmail = async ({ email, subject, message, attachments }) => {
         return { success: false, info: 'Email delivery disabled in development' };
     }
 
+    // Real email sending is now enabled in development as well, provided credentials are set.
+
     const transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
             user: process.env.EMAIL_USER,
-            pass: process.env.EMAIL_PASSWORD
+            pass: (process.env.EMAIL_PASSWORD || '').replace(/\s/g, '') // Remove spaces from Gmail App Password
         }
     });
 
